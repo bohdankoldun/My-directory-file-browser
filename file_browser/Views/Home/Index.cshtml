@@ -1,0 +1,60 @@
+﻿<script>
+    var questApp = angular.module('myFileBrowserApp');
+
+
+    questApp.controller('FilesController', function ($scope, $http) {
+        $http({
+            method: 'GET',
+            url: '/api/FileBrowser'
+        })
+         .success(function (data) {
+             $scope.drives = data;
+         });
+
+
+        $scope.getDirectory = function ($event) {
+            var Path = $event.currentTarget.id;
+            $http({
+                method: "GET",
+                url: '/api/FileBrowser',
+                params: { path: Path }
+            }).success(function (data) {
+                $scope.folder = data;
+                
+            });
+        };
+
+       
+    });
+</script>
+
+<div ng-controller="FilesController">
+
+    <table>
+        <tr>
+            <td>Less 10Mb</td>
+            <td>10Mb-50Mb</td>
+            <td>More 100Mb</td>
+        </tr>
+        <tr>
+            <td ng-bind="folder.countLess10mb"></td>
+            <td ng-bind="folder.countBetween10mb_50mb"></td>
+            <td ng-bind="folder.More100mb"></td>
+        </tr>
+    </table>
+
+    <div ng-repeat="drive in drives" id={{drive.Name}} ng-click="getDirectory($event)">{{drive.Name}}</div>
+
+    <p>
+        <strong>Current path:</strong> 
+        <span ng-bind="folder.Path"></span> 
+    </p>
+
+    <p id={{folder.ParentDirectory}} ng-click="getDirectory($event)">--</p>
+
+    <p ng-repeat="directory in folder.Directories" ng-bind="directory" id="{{folder.Path}}{{directory}}" ng-click="getDirectory($event)"></p>
+
+    <p ng-repeat="file in folder.Files" ng-bind="file" href="{{folder.Path}}{{file}}"></p>
+
+
+</div>
