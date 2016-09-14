@@ -1,0 +1,44 @@
+﻿body {
+    margin: 40px 20%;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+td {
+    border: 2px solid #aaaaaa;
+    text-align: center;
+    padding: 7px;
+}
+
+th {
+    border: 2px solid #aaaaaa;
+    background: #aaaaaa;
+    color: white;
+    font-weight: bold;
+    vertical-align: central;
+    padding: 7px;
+}
+
+.folder {
+    color: #4c31ff;
+}
+
+    .folder:hover {
+        background-color: #cfd544;
+    }
+
+.file {
+    color: #4c31ff;
+    text-decoration: underline;
+}
+
+.disk{
+
+}
+.disk:hover{
+     background-color: #67bced;
+}

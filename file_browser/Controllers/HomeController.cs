@@ -10,7 +10,7 @@ namespace file_browser.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "My file/directory browser";
 
             return View();
         }

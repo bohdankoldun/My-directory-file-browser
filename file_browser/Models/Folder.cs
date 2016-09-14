@@ -5,6 +5,9 @@ using System.Web;
 
 namespace file_browser.Models
 {
+    /// <summary>
+    /// model for folder of file system
+    /// </summary>
     public class Folder
     {
         public string Path { get; set; }

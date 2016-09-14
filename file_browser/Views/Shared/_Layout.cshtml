@@ -4,15 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/style.css")
 </head>
 <body>
     @Scripts.Render("~/bundles/angular")
     @RenderSection("scripts", required: false)
 
-    <script>
-        angular.module('myFileBrowserApp', []);
-    </script>
-    
     <div>
         @RenderBody()
         <hr />
@@ -20,7 +17,5 @@
             <p style="text-align:center; margin-top:20px;">&copy; @DateTime.Now.Year - My directory/file browser</p>
         </footer>
     </div>
-    
-  
 </body>
 </html>

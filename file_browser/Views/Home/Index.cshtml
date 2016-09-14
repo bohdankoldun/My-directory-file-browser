@@ -1,40 +1,21 @@
-﻿<script>
-    var questApp = angular.module('myFileBrowserApp');
-
-
-    questApp.controller('FilesController', function ($scope, $http) {
-        $http({
-            method: 'GET',
-            url: '/api/FileBrowser'
-        })
-         .success(function (data) {
-             $scope.drives = data;
-         });
-
-
-        $scope.getDirectory = function ($event) {
-            var Path = $event.currentTarget.id;
-            $http({
-                method: "GET",
-                url: '/api/FileBrowser',
-                params: { path: Path }
-            }).success(function (data) {
-                $scope.folder = data;
-                
-            });
-        };
-
-       
-    });
-</script>
+﻿@Scripts.Render("~/Scripts/Models/myFileBrowserApp.js")
+@Scripts.Render("~/Scripts/Controllers/files.controller.js")
 
 <div ng-controller="FilesController">
 
-    <table>
+    <!--view for list of hard disk drives-->
+    <strong>Choose a drive of hard disk:</strong>
+    <p ng-repeat="drive in drives" id={{drive.RootDirectory}} ng-click="getDirectory($event)" class="disk">
+          <strong style='padding-right:10px;'>{{drive.Name}}</strong>
+          {{((drive.TotalSize/1073741824-drive.AvailableFreeSpace/1073741824)| number:2)*1}}Gb/{{(drive.TotalSize/1073741824| number:2)*1}}Gb
+    </p>
+
+    <!--table of count files-->
+    <table ng-if="folder.Path">
         <tr>
-            <td>Less 10Mb</td>
-            <td>10Mb-50Mb</td>
-            <td>More 100Mb</td>
+            <th>Less 10Mb</th>
+            <th>10Mb-50Mb</th>
+            <th>More 100Mb</th>
         </tr>
         <tr>
             <td ng-bind="folder.countLess10mb"></td>
@@ -43,18 +24,26 @@
         </tr>
     </table>
 
-    <div ng-repeat="drive in drives" id={{drive.Name}} ng-click="getDirectory($event)">{{drive.Name}}</div>
-
-    <p>
-        <strong>Current path:</strong> 
-        <span ng-bind="folder.Path"></span> 
+    <!--current path-->
+    <p ng-if="folder.Path">
+        <strong>Current path:</strong>
+        <span ng-bind="folder.Path"></span>
     </p>
 
-    <p id={{folder.ParentDirectory}} ng-click="getDirectory($event)">--</p>
+    <!--for showing exeption-->
+    <p ng-bind="exception" style="color:red;"></p>
 
-    <p ng-repeat="directory in folder.Directories" ng-bind="directory" id="{{folder.Path}}{{directory}}" ng-click="getDirectory($event)"></p>
+    <!--view for list of directories and files-->
+    <div style="border:2px solid  #aaaaaa; padding:5px;"  ng-if="folder.Path">
+        
+        <p id={{folder.ParentDirectory}} ng-click="getDirectory($event)" ng-if="folder.ParentDirectory">
+            <img src="~/Picture/arrow-left-back.png" height="30px" />
+        </p>
 
-    <p ng-repeat="file in folder.Files" ng-bind="file" href="{{folder.Path}}{{file}}"></p>
+        <p ng-repeat="directory in folder.Directories" ng-bind="directory" id="{{folder.Path}}{{directory}}" ng-click="getDirectory($event)" class="folder"></p>
 
+        <p ng-repeat="file in folder.Files" ng-bind="file" href="{{folder.Path}}{{file}}" class="file"></p>
+
+    </div>
 
 </div>
