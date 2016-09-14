@@ -51,19 +51,22 @@ namespace file_browser.Controllers
 
                 if (Directory.Exists(path))
                 {
+                    //get path of directory
                     folder.Path = path;
 
-                    // (char)92 = '\'
+                    //add '\' to the directory; (char)92 = '\'
                     if (folder.Path[folder.Path.Length - 1] != (char)92)
                         folder.Path += (char)92;
 
+                    //get parent directory
                     if (Directory.GetParent(path) != null)
                         folder.ParentDirectory = Directory.GetParent(path).FullName;
 
-
+                    //get subdirectories and files
                     folder.Directories = Directory.GetDirectories(path).Select(directory => Path.GetFileName(directory)).ToArray();
                     folder.Files = Directory.GetFiles(path).Select(file => Path.GetFileName(file)).ToArray();
 
+                    //get count of three class files:  <= 10mb;  > 10mb AND <= 50mb;  >= 100mb
                     int countLess10mb = 0, countBetween10mb_50mb = 0, More100mb = 0;
                     DistributeFilesOfFolder(path, ref countLess10mb, ref countBetween10mb_50mb, ref More100mb);
 
